@@ -4,7 +4,6 @@ import MusicPlayer from "@components/widgets/music-player/MusicPlayer.svelte";
 import Pio from "@components/features/pio/Pio.svelte"; // 使用 Svelte 版本的 Pio 组件
 import { PageProgressBar } from "@components/control/PageProgressBar";
 import {
-	musicPlayerConfig,
 	pioConfig,
 	profileConfig,
 	siteConfig,
@@ -228,8 +227,8 @@ if (siteConfig.font) {
 		/>
 		<slot />
 
-		<!-- Music Player - 仅在启用时加载 -->
-		{musicPlayerConfig.enable && <MusicPlayer client:idle />}
+		<!-- Music Player - 核心始终加载（当enable=true），UI通过showFloatingPlayer控制 -->
+		<MusicPlayer client:idle />
 
 		<!-- Pio 看板娘组件 - 仅在启用时加载 -->
 		{pioConfig.enable && <Pio client:idle />}
