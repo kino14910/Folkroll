@@ -18,20 +18,21 @@ export interface AnimeItem {
 
 const localAnimeList: AnimeItem[] = [
 	{
-		title: "Lycoris Recoil",
+		title: "EVA",
 		status: "completed",
-		rating: 9.8,
-		cover: "/assets/anime/lkls.webp",
-		description: "Girl's gunfight",
-		episodes: "12 episodes",
-		year: "2022",
-		genre: ["Action", "Slice of life"],
+		rating: 9.7,
+		cover: "/assets/anime/EVA.webp",
+		description:
+			"Follows Shinji Ikari, a teenage boy who is recruited by his father Gendo Ikari to the mysterious organization Nerv.",
+		episodes: "26 episodes",
+		year: "1995",
+		genre: ["Apocalyptic", "Mecha", "Psychological drama"],
 		studio: "A-1 Pictures",
-		link: "https://www.bilibili.com/bangumi/media/md28338623",
-		progress: 12,
-		totalEpisodes: 12,
-		startDate: "2022-07",
-		endDate: "2022-09",
+		link: "https://www.bilibili.com/bangumi/media/md1635",
+		progress: 26,
+		totalEpisodes: 26,
+		startDate: "2024-07",
+		endDate: "2024-09",
 	},
 	{
 		title: "Yowamushi Pedal",

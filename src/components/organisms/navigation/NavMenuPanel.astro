@@ -51,7 +51,7 @@ const processedLinks: ProcessedNavBarLink[] = (
 <div
 	id="nav-menu-panel"
 	class:list={[
-		"float-panel float-panel-closed absolute transition-all fixed right-4 px-2 py-2 max-h-[80vh] overflow-y-auto",
+		"float-panel float-panel-closed absolute transition-all right-4 px-2 py-2 max-h-[80vh] overflow-y-auto",
 	]}
 >
 	{
@@ -61,7 +61,7 @@ const processedLinks: ProcessedNavBarLink[] = (
 					<div class="mobile-dropdown" data-mobile-dropdown>
 						<button
 							class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-4 w-full text-left
-                            hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition"
+                            hover:bg-(--btn-plain-bg-hover) active:bg-[var(--btn-plain-bg-active)] transition"
 							data-mobile-dropdown-trigger
 							aria-expanded="false"
 						>

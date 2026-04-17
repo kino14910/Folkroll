@@ -1,8 +1,20 @@
 @reference "tailwindcss";
 
 .custom-md {
+  * {
+    letter-spacing: 0.1ch;
+  }
+
   h1 {
     @apply text-3xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  p {
+    @apply text-lg;
   }
 
   :is(h1, h2, h3, h4, h5, h6) {
@@ -21,8 +33,7 @@
 
   /* --- 链接 --- */
   a:not(.no-styling) {
-    @apply relative bg-none font-medium text-(--primary)
-        underline decoration-(--link-underline) decoration-1 decoration-dashed underline-offset-4;
+    @apply relative bg-none font-medium text-(--primary) underline decoration-(--link-underline) decoration-1 decoration-dashed underline-offset-4;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
 
@@ -47,6 +58,7 @@
     }
 
     counter-reset: line;
+
     span.line {
       &:before {
         @apply text-white/25 mr-4 w-4 inline-block select-none;
@@ -54,6 +66,7 @@
         counter-increment: line;
         direction: rtl;
       }
+
       &:last-child:empty,
       &:last-child:has(> span:empty:only-child) {
         display: none;
@@ -94,17 +107,21 @@
       height: 6px;
       width: 6px;
     }
+
     &::-webkit-scrollbar-track {
       background: transparent;
       margin: 0 calc(var(--radius-large) + 2px);
     }
+
     &::-webkit-scrollbar-thumb {
       background: var(--scrollbar-bg);
       border-radius: 4px;
     }
+
     &::-webkit-scrollbar-thumb:hover {
       background: var(--scrollbar-bg-hover);
     }
+
     &::-webkit-scrollbar-thumb:active {
       background: var(--scrollbar-bg-active);
     }
@@ -138,6 +155,7 @@
   tr:last-child td {
     border-bottom: none;
   }
+
   th:last-child,
   td:last-child {
     border-right: none;
@@ -146,6 +164,7 @@
   tr:nth-child(even) {
     background-color: var(--codeblock-bg);
   }
+
   tr:hover td {
     background-color: var(--btn-plain-bg-hover);
     transition: none;
@@ -162,28 +181,32 @@
       height: 6px;
       width: 6px;
     }
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }
+
     &::-webkit-scrollbar-thumb {
       background: var(--scrollbar-bg);
       border-radius: 4px;
     }
+
     &::-webkit-scrollbar-thumb:hover {
       background: var(--scrollbar-bg-hover);
     }
+
     &::-webkit-scrollbar-thumb:active {
       background: var(--scrollbar-bg-active);
     }
   }
 
-  .katex-display > .katex {
+  .katex-display>.katex {
     display: block;
     width: fit-content;
     min-width: calc(100% - 2px);
   }
 
-  .katex-display > .katex:has(.tag) > .katex-html {
+  .katex-display>.katex:has(.tag)>.katex-html {
     display: block;
     padding-right: 3rem;
     box-sizing: border-box;

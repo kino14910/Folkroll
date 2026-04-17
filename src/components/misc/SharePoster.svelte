@@ -12,7 +12,6 @@
 		getLines,
 		loadImage,
 		parseDate,
-		type PosterConfig,
 		type SizeConfig,
 	} from "./utils/poster-renderer";
 
@@ -404,7 +403,7 @@
 {#if showModal}
 	<div
 		use:portal
-		class="fixed inset-0 z-[9999] flex items-center justify-center p-4 transition-opacity"
+		class="fixed inset-0 z-9999 flex items-center justify-center p-4 transition-opacity"
 		style="background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);"
 		onclick={closeModal}
 		role="button"
@@ -428,7 +427,7 @@
 			tabindex="0"
 		>
 			<div
-				class="p-6 flex justify-center min-h-[200px] items-center"
+				class="p-6 flex justify-center min-h-50 items-center"
 				style="background-color: var(--card-bg);"
 			>
 				{#if posterImage}
