@@ -44,8 +44,7 @@
 		>
 			<span class="text-sm font-bold">{name}</span>
 			{#if hasPost}
-				<span class="w-1 h-1 rounded-full bg-[var(--primary)] mt-1"
-				></span>
+				<span class="w-1 h-1 rounded-full bg-(--primary) mt-1"></span>
 			{:else}
 				<span class="w-1 h-1 mt-1"></span>
 			{/if}

@@ -41,11 +41,11 @@
 
 <div class="mt-4">
 	<div
-		class="h-[1px] w-full bg-neutral-200 dark:bg-neutral-700 mb-2"
+		class="h-px w-full bg-neutral-200 dark:bg-neutral-700 mb-2"
 		class:hidden={isEmpty}
 	></div>
 	<div
-		class="flex flex-col gap-1 max-h-[9.375rem] overflow-y-auto custom-scrollbar"
+		class="flex flex-col gap-1 max-h-37.5 overflow-y-auto custom-scrollbar"
 	>
 		{#if !isEmpty}
 			{#each posts as post (post.id)}

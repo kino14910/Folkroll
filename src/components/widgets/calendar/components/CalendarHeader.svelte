@@ -35,12 +35,12 @@
 <div class="flex justify-between items-center mb-2 mt-2">
 	<div
 		class="font-bold transition text-lg text-neutral-900 dark:text-neutral-100 relative ml-4 flex items-center
-			before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
-			before:absolute before:left-[-16px] before:top-[13.5px]"
+			before:w-1 before:h-4 before:rounded-md before:bg-(--primary)
+			before:absolute before:-left-4 before:top-[13.5px]"
 	>
 		<button
 			type="button"
-			class="flex justify-center items-center cursor-pointer hover:bg-[var(--btn-plain-bg-hover)] px-2 py-2 -ml-2 rounded-lg transition-colors"
+			class="flex justify-center items-center cursor-pointer hover:bg-(--btn-plain-bg-hover) px-2 py-2 -ml-2 rounded-lg transition-colors"
 			onclick={onTitleClick}
 			aria-label="Select month or year"
 		>
@@ -56,7 +56,7 @@
 		{#if isBackToTodayVisible}
 			<button
 				type="button"
-				class="p-1.5 rounded-md hover:bg-[var(--btn-plain-bg-hover)] text-[var(--primary)] transition-all"
+				class="p-1.5 rounded-md hover:bg-(--btn-plain-bg-hover) text-(--primary) transition-all"
 				onclick={onBackToToday}
 				aria-label="Back to today"
 			>
@@ -68,7 +68,7 @@
 		{/if}
 		<button
 			type="button"
-			class="p-1.5 rounded-md hover:bg-[var(--btn-plain-bg-hover)] text-neutral-600 dark:text-neutral-400 hover:text-[var(--primary)] transition-colors {currentView ===
+			class="p-1.5 rounded-md hover:bg-(--btn-plain-bg-hover) text-neutral-600 dark:text-neutral-400 hover:text-(--primary) transition-colors {currentView ===
 			'day'
 				? ''
 				: 'invisible'}"
@@ -79,7 +79,7 @@
 		</button>
 		<button
 			type="button"
-			class="p-1.5 rounded-md hover:bg-[var(--btn-plain-bg-hover)] text-neutral-600 dark:text-neutral-400 hover:text-[var(--primary)] transition-colors {currentView ===
+			class="p-1.5 rounded-md hover:bg-(--btn-plain-bg-hover) text-neutral-600 dark:text-neutral-400 hover:text-(--primary) transition-colors {currentView ===
 			'day'
 				? ''
 				: 'invisible'}"

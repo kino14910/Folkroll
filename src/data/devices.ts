@@ -19,8 +19,7 @@ export const devicesData: DeviceCategory = {
 			name: "Redmi K30S 至尊纪念版",
 			image: "/images/device/redmi_k30s_ultra.webp",
 			specs: "Black / 8G + 128GB",
-			description:
-				"Flagship performance, Hasselblad imaging, 80W SuperVOOC.",
+			description: "6.67-inch LCD FHD+ display, 144Hz refresh rate.",
 			link: "https://www.mi.com/redmik30s",
 		},
 	],

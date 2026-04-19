@@ -202,13 +202,13 @@
 
 {#if shouldRenderFloatingUi}
 	{#if state.showError}
-		<div class="fixed bottom-20 right-4 z-[60] max-w-sm">
+		<div class="fixed bottom-20 right-4 z-60 max-w-sm">
 			<div
 				class="bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-slide-up"
 			>
 				<Icon
 					icon="material-symbols:error"
-					class="text-xl flex-shrink-0"
+					class="text-xl shrink-0"
 				/>
 				<span class="text-sm flex-1">{state.errorMessage}</span>
 				<button

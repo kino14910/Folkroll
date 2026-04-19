@@ -41,7 +41,7 @@
 </script>
 
 <div
-	class="absolute inset-0 bg-[var(--card-bg)] z-10 flex flex-col transition-opacity duration-200"
+	class="absolute inset-0 bg-(--card-bg) z-10 flex flex-col transition-opacity duration-200"
 	class:opacity-0={currentView === "day"}
 	class:opacity-100={currentView !== "day"}
 	class:hidden={currentView === "day"}

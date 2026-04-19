@@ -1,5 +1,6 @@
 ---
 import ConfigCarrier from "@components/misc/ConfigCarrier.astro";
+import PageLoader from "@components/misc/PageLoader.svelte";
 import MusicPlayer from "@components/widgets/music-player/MusicPlayer.svelte";
 import Pio from "@components/features/pio/Pio.svelte"; // 使用 Svelte 版本的 Pio 组件
 import { PageProgressBar } from "@components/control/PageProgressBar";
@@ -156,7 +157,7 @@ if (siteConfig.font) {
 <!doctype html>
 <html
 	lang={siteLang}
-	class="bg-[var(--page-bg)] text-[14px] md:text-[16px]"
+	class="bg-(--page-bg) text-[14px] md:text-[16px]"
 	data-overlayscrollbars-initialize
 >
 	<head>
@@ -203,6 +204,7 @@ if (siteConfig.font) {
 			href={`${Astro.site}rss.xml`}
 		/>
 	</head>
+
 	<body
 		class="min-h-screen"
 		class:list={[
@@ -237,6 +239,10 @@ if (siteConfig.font) {
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
+
+		<div transition:persist="loader">
+			<PageLoader client:load />
+		</div>
 	</body>
 </html>
 

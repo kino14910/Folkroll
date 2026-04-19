@@ -26,7 +26,7 @@ export const skillsData: Skill[] = [
 			"Modern JavaScript development, including ES6+ syntax, asynchronous programming, and modular development.",
 		icon: "logos:javascript",
 		category: "frontend",
-		level: "advanced",
+		level: "expert",
 		experience: { years: 4, months: 6 },
 		projects: [
 			"mizuki-blog",
@@ -381,7 +381,7 @@ export const skillsData: Skill[] = [
 		level: "intermediate",
 		experience: { years: 2, months: 0 },
 		projects: ["server-management", "shell-scripting"],
-		color: "#FCC624",
+		color: "#2066B4",
 	},
 	{
 		id: "postman",
@@ -404,7 +404,7 @@ export const skillsData: Skill[] = [
 		category: "tools",
 		level: "intermediate",
 		experience: { years: 1, months: 6 },
-		color: "#F24E1E",
+		color: "#E2CEBE",
 	},
 	{
 		id: "photoshop",
