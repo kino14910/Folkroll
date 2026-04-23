@@ -5,8 +5,8 @@ import { Icon } from 'astro-icon/components'
 
 import FloatingButton from '@components/common/FloatingButton.astro'
 import { siteConfig } from '../../../config'
-import I18nKey from '../../../i18n/i18nKey'
-import { i18n } from '../../../i18n/translation'
+import I18nKey from '@i18n/i18nKey'
+import { i18n } from '@i18n/translation'
 
 interface Props {
 	headings?: MarkdownHeading[]
@@ -188,12 +188,12 @@ const useJapaneseBadge = siteConfig.toc.useJapaneseBadge
 
 <script>
 	import { findActiveHeadingIndex } from './hooks/useTocHighlight'
-import { throttle } from './hooks/useTocScroll'
-import {
-	generateTOCItems,
-	getTOCConfig,
-	scrollToHeading,
-} from './utils/toc-utils'
+	import { throttle } from './hooks/useTocScroll'
+	import {
+		generateTOCItems,
+		getTOCConfig,
+		scrollToHeading,
+	} from './utils/toc-utils'
 
 	interface FloatingTOCState {
 		btn: HTMLElement | null

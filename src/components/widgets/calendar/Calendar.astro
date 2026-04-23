@@ -1,13 +1,13 @@
 ---
+import I18nKey from '@i18n/i18nKey'
+import { i18n } from '@i18n/translation'
 import { siteConfig } from '../../../config'
-import I18nKey from '../../../i18n/i18nKey'
-import { i18n } from '../../../i18n/translation'
 import WidgetLayout from '../common/WidgetLayout.astro'
 import CalendarWidget from './Calendar.svelte'
 
 interface Props {
-	class?: string;
-	style?: string;
+	class?: string
+	style?: string
 }
 
 const { class: className, style } = Astro.props
@@ -38,11 +38,11 @@ const weekDays = [
 ]
 
 const isChinese = siteConfig.lang.startsWith('zh')
-const yearSuffix = isChinese ? '年' : ' ';
+const yearSuffix = isChinese ? '年' : ' '
 ---
 
 <WidgetLayout
-	id="calendar-widget"
+	id='calendar-widget'
 	class={`hidden md:block ${className}`}
 	style={style}
 >

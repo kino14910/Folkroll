@@ -30,7 +30,7 @@ const browserGlobals = {
 	CryptoJS: 'readonly',
 	Fancybox: 'readonly',
 	twikoo: 'readonly',
-};
+}
 
 export default tseslint.config(
 	// Ignores
@@ -184,4 +184,4 @@ export default tseslint.config(
 			'astro/no-unused-define-vars-in-style': 'off',
 		},
 	}
-);
+)

@@ -2,8 +2,8 @@
 import { Icon } from 'astro-icon/components'
 
 import { siteConfig } from '../../../config'
-import I18nKey from '../../../i18n/i18nKey'
-import { i18n } from '../../../i18n/translation'
+import I18nKey from '@i18n/i18nKey'
+import { i18n } from '@i18n/translation'
 import {
 	getCategoryList,
 	getSortedPosts,
@@ -12,8 +12,8 @@ import {
 import WidgetLayout from '../common/WidgetLayout.astro'
 
 interface Props {
-	class?: string;
-	style?: string;
+	class?: string
+	style?: string
 }
 
 const { class: className, style } = Astro.props
@@ -50,7 +50,7 @@ for (const post of posts) {
 		// 按空白字符分割，计算单词数量
 		const nonCjkWords = nonCjkText
 			.split(/\s+/)
-			.filter((word) => word.trim().length > 0)
+			.filter(word => word.trim().length > 0)
 
 		totalWords += cjkCount + nonCjkWords.length
 	}
@@ -69,9 +69,7 @@ const latestPost = posts.reduce((latest, post) => {
 	return post.data.published > latest.data.published ? post : latest
 }, posts[0])
 
-const lastPostDate = latestPost
-	? latestPost.data.published.toISOString()
-	: null
+const lastPostDate = latestPost ? latestPost.data.published.toISOString() : null
 
 const stats = [
 	{
@@ -111,30 +109,30 @@ const stats = [
 		dynamic: true,
 		id: 'last-update',
 	},
-];
+]
 ---
 
 <WidgetLayout
 	name={i18n(I18nKey.siteStats)}
-	id="site-stats"
+	id='site-stats'
 	class={className}
 	style={style}
 >
-	<div class="flex flex-col gap-1">
+	<div class='flex flex-col gap-1'>
 		{
-			stats.map((stat) => (
-				<div class="flex items-center justify-between px-2 py-2">
-					<div class="flex items-center gap-2.5 flex-1 min-w-0">
-						<div class="text-(--primary) text-xl shrink-0">
+			stats.map(stat => (
+				<div class='flex items-center justify-between px-2 py-2'>
+					<div class='flex items-center gap-2.5 flex-1 min-w-0'>
+						<div class='text-(--primary) text-xl shrink-0'>
 							<Icon name={stat.icon} />
 						</div>
-						<span class="text-neutral-700 dark:text-neutral-300 font-medium text-sm wrap-break-word leading-tight">
+						<span class='text-neutral-700 dark:text-neutral-300 font-medium text-sm wrap-break-word leading-tight'>
 							{stat.label}
 						</span>
 					</div>
-					<div class="flex items-center ml-3 shrink-0">
+					<div class='flex items-center ml-3 shrink-0'>
 						<span
-							class="text-base font-bold text-neutral-900 dark:text-neutral-100"
+							class='text-base font-bold text-neutral-900 dark:text-neutral-100'
 							data-stat-id={stat.id}
 						>
 							{stat.formatted
@@ -142,7 +140,7 @@ const stats = [
 								: stat.value}
 						</span>
 						{stat.suffix && (
-							<span class="text-sm text-neutral-500 dark:text-neutral-400 ml-1">
+							<span class='text-sm text-neutral-500 dark:text-neutral-400 ml-1'>
 								{stat.suffix}
 							</span>
 						)}
@@ -157,37 +155,37 @@ const stats = [
 	function updateDynamicStats() {
 		const today = new Date()
 
-	// 更新运行天数
-	const startDate = new Date(siteStartDate)
-	const diffTime = Math.abs(today.getTime() - startDate.getTime())
-	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+		// 更新运行天数
+		const startDate = new Date(siteStartDate)
+		const diffTime = Math.abs(today.getTime() - startDate.getTime())
+		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-	const runningDaysElements = document.querySelectorAll(
+		const runningDaysElements = document.querySelectorAll(
 			'[data-stat-id="running-days"]',
 		)
-	if (runningDaysElements.length > 0) {
-			runningDaysElements.forEach((element) => {
+		if (runningDaysElements.length > 0) {
+			runningDaysElements.forEach(element => {
 				element.textContent = diffDays.toString()
-		})
+			})
 		}
 
 		// 更新最后活动时间
 		if (lastPostDate) {
 			const lastPost = new Date(lastPostDate)
-		const timeSinceLastPost = Math.abs(
+			const timeSinceLastPost = Math.abs(
 				today.getTime() - lastPost.getTime(),
 			)
-		const daysSinceLastUpdate = Math.floor(
+			const daysSinceLastUpdate = Math.floor(
 				timeSinceLastPost / (1000 * 60 * 60 * 24),
 			)
 
-		const lastUpdateElements = document.querySelectorAll(
+			const lastUpdateElements = document.querySelectorAll(
 				'[data-stat-id="last-update"]',
 			)
-		if (lastUpdateElements.length > 0) {
-				lastUpdateElements.forEach((element) => {
+			if (lastUpdateElements.length > 0) {
+				lastUpdateElements.forEach(element => {
 					element.textContent = daysSinceLastUpdate.toString()
-			})
+				})
 			}
 		}
 	}
@@ -195,6 +193,6 @@ const stats = [
 	// 页面加载时更新
 	updateDynamicStats()
 
-// 每小时更新一次（可选，因为天数变化较慢）
-setInterval(updateDynamicStats, 60 * 60 * 1000)
+	// 每小时更新一次（可选，因为天数变化较慢）
+	setInterval(updateDynamicStats, 60 * 60 * 1000)
 </script>

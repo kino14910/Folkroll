@@ -5,37 +5,34 @@
  * 复用 TOCManager 逻辑
  */
 
-import "@/styles/toc.css";
+import '@/styles/toc.css'
 
-import type { MarkdownHeading } from "astro";
-import { siteConfig } from "@/config";
+import type { MarkdownHeading } from 'astro'
+import { siteConfig } from '@/config'
 
-import I18nKey from "../../../i18n/i18nKey";
-import { i18n } from "../../../i18n/translation";
-import WidgetLayout from "../common/WidgetLayout.astro";
+import I18nKey from '@i18n/i18nKey'
+import { i18n } from '@i18n/translation'
+import WidgetLayout from '../common/WidgetLayout.astro'
 
 interface Props {
-	class?: string;
-	style?: string;
-	headings?: MarkdownHeading[];
+	class?: string
+	style?: string
+	headings?: MarkdownHeading[]
 }
 
-const { class: className, style } = Astro.props;
-const useJapaneseBadge = siteConfig.toc.useJapaneseBadge;
+const { class: className, style } = Astro.props
+const useJapaneseBadge = siteConfig.toc.useJapaneseBadge
 ---
 
 <WidgetLayout
 	name={i18n(I18nKey.tableOfContents)}
-	id="card-toc"
-	class={"group " + (className || "")}
+	id='card-toc'
+	class={'group ' + (className || '')}
 	style={style}
 >
-	<div
-		data-card-toc-root
-		data-japanese-badge={String(useJapaneseBadge)}
-	>
-		<div class="toc-scroll-container">
-			<div class="toc-content" data-card-toc-content></div>
+	<div data-card-toc-root data-japanese-badge={String(useJapaneseBadge)}>
+		<div class='toc-scroll-container'>
+			<div class='toc-content' data-card-toc-content></div>
 		</div>
 	</div>
 </WidgetLayout>
@@ -56,9 +53,9 @@ const useJapaneseBadge = siteConfig.toc.useJapaneseBadge;
 </style>
 
 <script>
-	import { TOCManager } from "@/utils/tocManager";
+	import { TOCManager } from '@/utils/tocManager'
 
-	const cardTocManagers = new WeakMap();
+	const cardTocManagers = new WeakMap()
 
 	/**
 	 * 为单个 card-toc 实例初始化目录。
@@ -66,38 +63,37 @@ const useJapaneseBadge = siteConfig.toc.useJapaneseBadge;
 	 */
 	function initCardTOC(root: Element) {
 		if (!(root instanceof HTMLElement)) {
-			return;
+			return
 		}
 
-		const tocContent = root.querySelector("[data-card-toc-content]");
+		const tocContent = root.querySelector('[data-card-toc-content]')
 		if (!(tocContent instanceof HTMLElement)) {
-			return;
+			return
 		}
 
 		try {
-			const existingManager = cardTocManagers.get(root);
+			const existingManager = cardTocManagers.get(root)
 			if (
-				existingManager &&
-				typeof existingManager.cleanup === "function"
+				existingManager
+				&& typeof existingManager.cleanup === 'function'
 			) {
-				existingManager.cleanup();
+				existingManager.cleanup()
 			}
 
-			const useJapaneseBadge =
-				root.dataset.japaneseBadge === "true";
+			const useJapaneseBadge = root.dataset.japaneseBadge === 'true'
 
 			const manager = new TOCManager({
 				contentElement: tocContent,
 				maxLevel: 3,
 				useJapaneseBadge,
 				scrollOffset: 80,
-			});
+			})
 
-			cardTocManagers.set(root, manager);
-			manager.init();
+			cardTocManagers.set(root, manager)
+			manager.init()
 		} catch (error) {
-			if (typeof reportError === "function" && error instanceof Error) {
-				reportError(error);
+			if (typeof reportError === 'function' && error instanceof Error) {
+				reportError(error)
 			}
 		}
 	}
@@ -107,41 +103,41 @@ const useJapaneseBadge = siteConfig.toc.useJapaneseBadge;
 	 * 统一批量初始化，确保可见和隐藏实例都各自绑定正确容器。
 	 */
 	function initAllCardTOCs() {
-		document.querySelectorAll("[data-card-toc-root]").forEach((root) => {
-			initCardTOC(root);
-		});
+		document.querySelectorAll('[data-card-toc-root]').forEach(root => {
+			initCardTOC(root)
+		})
 	}
 
-	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", initAllCardTOCs);
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initAllCardTOCs)
 	} else {
-		initAllCardTOCs();
+		initAllCardTOCs()
 	}
 
-	document.addEventListener("swup:contentReplaced", () => {
-		setTimeout(initAllCardTOCs, 100);
-	});
+	document.addEventListener('swup:contentReplaced', () => {
+		setTimeout(initAllCardTOCs, 100)
+	})
 
-	document.addEventListener("astro:page-load", () => {
-		setTimeout(initAllCardTOCs, 100);
-	});
+	document.addEventListener('astro:page-load', () => {
+		setTimeout(initAllCardTOCs, 100)
+	})
 
-	document.addEventListener("astro:after-swap", () => {
-		setTimeout(initAllCardTOCs, 100);
-	});
+	document.addEventListener('astro:after-swap', () => {
+		setTimeout(initAllCardTOCs, 100)
+	})
 
-	window.addEventListener("popstate", () => {
-		setTimeout(initAllCardTOCs, 200);
-	});
+	window.addEventListener('popstate', () => {
+		setTimeout(initAllCardTOCs, 200)
+	})
 
-	window.addEventListener("hashchange", () => {
+	window.addEventListener('hashchange', () => {
 		if (!window.tocInternalNavigation) {
-			setTimeout(initAllCardTOCs, 100);
+			setTimeout(initAllCardTOCs, 100)
 		}
-		window.tocInternalNavigation = false;
-	});
+		window.tocInternalNavigation = false
+	})
 
-	document.addEventListener("password:decrypted", () => {
-		setTimeout(initAllCardTOCs, 200);
-	});
+	document.addEventListener('password:decrypted', () => {
+		setTimeout(initAllCardTOCs, 200)
+	})
 </script>

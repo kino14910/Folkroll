@@ -1,12 +1,12 @@
 ---
-import { render } from 'astro:content'
 import { Icon } from 'astro-icon/components'
+import { render } from 'astro:content'
 
 import { getFileDirFromPath, getPostUrl, getTagUrl } from '@/utils/url-utils'
 
+import I18nKey from '@i18n/i18nKey'
+import { i18n } from '@i18n/translation'
 import { siteConfig } from '../../../config'
-import I18nKey from '../../../i18n/i18nKey'
-import { i18n } from '../../../i18n/translation'
 import Image from '../../atoms/Image/Image.astro'
 import PostMetadata from './PostMeta.astro'
 import type { PostCardProps } from './types'
