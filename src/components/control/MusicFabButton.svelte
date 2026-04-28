@@ -5,23 +5,29 @@
 	import type { MusicPlayerState } from '@/stores/musicPlayerStore'
 	import { musicPlayerStore } from '@/stores/musicPlayerStore'
 
-	let state: MusicPlayerState = musicPlayerStore.getState()
+	let playerState = $state<MusicPlayerState>(musicPlayerStore.getState())
 	let unsubscribe: (() => void) | undefined
 
 	const popoverSupported =
 		typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype
 
-	$: currentSongTitle = state.currentSong?.title || '音乐控制中心'
-	$: ariaLabel = state.isExpanded
-		? `收起音乐控制中心：${currentSongTitle}`
-		: `打开音乐控制中心：${currentSongTitle}`
-	$: statusIcon = state.isLoading
-		? 'svg-spinners:90-ring-with-bg'
-		: 'material-symbols:music-note-rounded'
+	const currentSongTitle = $derived(
+		playerState.currentSong?.title || '音乐控制中心',
+	)
+	const ariaLabel = $derived(
+		playerState.isExpanded
+			? `收起音乐控制中心：${currentSongTitle}`
+			: `打开音乐控制中心：${currentSongTitle}`,
+	)
+	const statusIcon = $derived(
+		playerState.isLoading
+			? 'svg-spinners:90-ring-with-bg'
+			: 'material-symbols:music-note-rounded',
+	)
 
 	onMount(() => {
 		unsubscribe = musicPlayerStore.subscribe(nextState => {
-			state = nextState
+			playerState = nextState
 		})
 
 		if (popoverSupported) {
@@ -53,9 +59,9 @@
 <button
 	id="music-fab-btn"
 	type="button"
-	class:active={state.isExpanded}
-	class:playing={state.isPlaying}
-	class:loading={state.isLoading}
+	class:active={playerState.isExpanded}
+	class:playing={playerState.isPlaying}
+	class:loading={playerState.isLoading}
 	class="music-fab btn-card"
 	aria-label={ariaLabel}
 	title={ariaLabel}
@@ -65,7 +71,7 @@
 		<Icon icon={statusIcon} />
 	</span>
 
-	{#if state.isPlaying}
+	{#if playerState.isPlaying}
 		<span class="music-fab__dot" aria-hidden="true"></span>
 	{/if}
 </button>

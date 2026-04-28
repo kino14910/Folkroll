@@ -26,7 +26,7 @@
 		avatar?: string | null
 	}
 
-	let {
+	const {
 		title,
 		author,
 		description = '',

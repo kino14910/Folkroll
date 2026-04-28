@@ -3,25 +3,16 @@
 	import { i18n } from '@i18n/translation'
 	import { onMount } from 'svelte'
 
-	export let tags: string[]
-	export let categories: string[]
-	export let sortedPosts: Post[] = []
-
-	const params = new URLSearchParams(window.location.search)
-	tags = params.has('tag') ? params.getAll('tag') : []
-	categories = params.has('category') ? params.getAll('category') : []
-	const uncategorized = params.get('uncategorized')
-
 	interface Post {
 		id: string
-		url?: string // 预计算的文章 URL
+		url?: string
 		data: {
 			title: string
 			tags: string[]
 			category?: string
 			published: Date
 			alias?: string
-			permalink?: string // 自定义固定链接
+			permalink?: string
 		}
 	}
 
@@ -30,7 +21,20 @@
 		posts: Post[]
 	}
 
-	let groups: Group[] = []
+	interface Props {
+		sortedPosts?: Post[]
+	}
+
+	const { sortedPosts = [] }: Props = $props()
+
+	const params = new URLSearchParams(window.location.search)
+	const tags = $state(params.has('tag') ? params.getAll('tag') : [])
+	const categories = $state(
+		params.has('category') ? params.getAll('category') : [],
+	)
+	const uncategorized = params.get('uncategorized')
+
+	let groups = $state<Group[]>([])
 
 	function formatDate(date: Date) {
 		const month = (date.getMonth() + 1).toString().padStart(2, '0')
@@ -65,7 +69,6 @@
 			filteredPosts = filteredPosts.filter(post => !post.data.category)
 		}
 
-		// 按发布时间倒序排序，确保不受置顶影响
 		filteredPosts = filteredPosts
 			.slice()
 			.sort(
@@ -155,7 +158,7 @@
 						<div
 							class="w-[70%] md:max-w-[65%] md:w-[65%] text-left font-bold
                      group-hover:translate-x-1 transition-all group-hover:text-(--primary)
-                     text-75 pr-8 whitespace-nowrap overflow-ellipsis overflow-hidden"
+                     text-75 pr-8 whitespace-nowrap text-ellipsis overflow-hidden"
 						>
 							{post.data.title}
 						</div>
@@ -163,7 +166,7 @@
 						<!-- tag list -->
 						<div
 							class="hidden md:block md:w-[15%] text-left text-sm transition
-                     whitespace-nowrap overflow-ellipsis overflow-hidden text-30"
+                     whitespace-nowrap text-ellipsis overflow-hidden text-30"
 						>
 							{formatTag(post.data.tags)}
 						</div>

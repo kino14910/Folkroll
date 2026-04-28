@@ -5,20 +5,24 @@
 
 	import type { PioProps } from './types'
 
-	export let config: Partial<PioProps['config']> = {}
+	interface Props {
+		config?: Partial<PioProps['config']>
+	}
 
-	const pioOptions = {
+	const { config = {} }: Props = $props()
+
+	const pioOptions = $derived({
 		mode: config?.mode ?? pioConfig.mode,
 		hidden: config?.hiddenOnMobile ?? pioConfig.hiddenOnMobile,
 		content: config?.dialog ?? pioConfig.dialog ?? {},
 		model: config?.models ??
 			pioConfig.models ?? ['/pio/models/pio/model.json'],
-	}
+	})
 
-	let pioInstance: any = null
-	let pioInitialized = false
-	let pioContainer: HTMLDivElement | null = null
-	let pioCanvas: HTMLCanvasElement | null = null
+	let pioInstance: any = $state(null)
+	let pioInitialized = $state(false)
+	let pioContainer = $state<HTMLDivElement | null>(null)
+	let pioCanvas = $state<HTMLCanvasElement | null>(null)
 
 	function initPio() {
 		if (
