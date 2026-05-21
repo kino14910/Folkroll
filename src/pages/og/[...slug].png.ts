@@ -8,6 +8,7 @@ import sharp from 'sharp'
 
 import { removeFileExtension } from '@/utils/url-utils'
 
+import { getPostPublicDescription } from '@utils/post-card-content'
 import { profileConfig, siteConfig } from '../../config'
 
 type Weight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
@@ -136,7 +137,7 @@ export async function GET({
 		day: 'numeric',
 	})
 
-	const description = post.data.description
+	const description = getPostPublicDescription(post.data)
 
 	const template = {
 		type: 'div',

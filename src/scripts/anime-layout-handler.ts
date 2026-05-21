@@ -1,6 +1,6 @@
 export interface LayoutHandlerOptions {
-	containerId: string;
-	hasRightSidebars: boolean;
+	containerId: string
+	hasRightSidebars: boolean
 }
 
 export function initAnimeLayoutHandler(options: LayoutHandlerOptions) {
@@ -185,12 +185,11 @@ export function initAnimeLayoutHandler(options: LayoutHandlerOptions) {
 		tryInit()
 	}
 
-	window.addEventListener(
-		'layoutChange',
-		(event: CustomEvent<{ layout: string }>) => {
-			updateAnimeListLayout(event.detail.layout)
-		},
-	)
+	window.addEventListener('layoutChange', ((
+		event: CustomEvent<{ layout: string }>,
+	) => {
+		updateAnimeListLayout(event.detail.layout)
+	}) as EventListener)
 }
 
 export function initLayoutListener(

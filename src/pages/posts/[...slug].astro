@@ -16,7 +16,9 @@ import Markdown from '@components/misc/Markdown.astro'
 import MainGridLayout from '@layouts/MainGridLayout.astro'
 import { getRelatedPosts, getSortedPosts } from '@utils/content-utils'
 import { hasCustomPermalink, initPostIdMap } from '@utils/permalink-utils'
+import { getPostPublicDescription } from '@utils/post-card-content'
 import { getFileDirFromPath, removeFileExtension } from '@utils/url-utils'
+import { getImage } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import { render } from 'astro:content'
 import {
@@ -39,8 +41,8 @@ export async function getStaticPaths() {
 	initPostIdMap(blogEntries)
 
 	const paths: {
-		params: { slug: string };
-		props: { entry: CollectionEntry<'posts'> };
+		params: { slug: string }
+		props: { entry: CollectionEntry<'posts'> }
 	}[] = []
 
 	for (const entry of blogEntries) {
@@ -104,14 +106,16 @@ const relatedPosts = relatedPostsConfig.enable
 	? await getRelatedPosts(entry, relatedPostsConfig.maxCount)
 	: []
 
-// Process cover image for SharePoster
+// Process cover image, for both OG and SharePoster
+let ogCoverUrl: string | undefined
 let posterCoverUrl = entry.data.image
+
 if (entry.data.image) {
 	const isLocal = !(
-		entry.data.image.startsWith('/') ||
-		entry.data.image.startsWith('http') ||
-		entry.data.image.startsWith('https') ||
-		entry.data.image.startsWith('data:')
+		entry.data.image.startsWith('/')
+		|| entry.data.image.startsWith('http')
+		|| entry.data.image.startsWith('https')
+		|| entry.data.image.startsWith('data:')
 	)
 	if (isLocal) {
 		const basePath = getFileDirFromPath(entry.filePath || '')
@@ -125,8 +129,21 @@ if (entry.data.image) {
 		if (file) {
 			const img = await file()
 			posterCoverUrl = img.src
+
+			// Resize for OG
+			const ogImage = await getImage({
+				src: img,
+				width: 1200,
+				format: 'jpeg',
+				quality: 80,
+			})
+			ogCoverUrl = ogImage.src
 		}
 	} else if (entry.data.image.startsWith('http')) {
+		// Retain the original URL for OG
+		ogCoverUrl = entry.data.image
+
+		// Convert to base64 only for poster
 		try {
 			const response = await fetch(entry.data.image)
 			const arrayBuffer = await response.arrayBuffer()
@@ -137,6 +154,8 @@ if (entry.data.image) {
 		} catch {
 			posterCoverUrl = entry.data.image
 		}
+	} else {
+		ogCoverUrl = entry.data.image // absolute path like "/images/foo.png"
 	}
 }
 
@@ -144,10 +163,10 @@ if (entry.data.image) {
 let posterAvatarUrl = profileConfig.avatar
 if (profileConfig.avatar) {
 	const isLocal = !(
-		profileConfig.avatar.startsWith('/') ||
-		profileConfig.avatar.startsWith('http') ||
-		profileConfig.avatar.startsWith('https') ||
-		profileConfig.avatar.startsWith('data:')
+		profileConfig.avatar.startsWith('/')
+		|| profileConfig.avatar.startsWith('http')
+		|| profileConfig.avatar.startsWith('https')
+		|| profileConfig.avatar.startsWith('data:')
 	)
 	if (isLocal) {
 		const files = import.meta.glob<ImageMetadata>('../../**', {
@@ -166,12 +185,16 @@ if (profileConfig.avatar) {
 
 // 判断是否为加密文章
 const isEncrypted = !!(entry.data.encrypted && entry.data.password)
+const publicDescription = getPostPublicDescription(
+	entry.data,
+	entry.data.title,
+)
 
 const jsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'BlogPosting',
 	headline: entry.data.title,
-	description: entry.data.description || entry.data.title,
+	description: publicDescription,
 	keywords: entry.data.tags,
 	author: {
 		'@type': 'Person',
@@ -183,33 +206,32 @@ const jsonLd = {
 		? entry.data.lang.replace('_', '-')
 		: siteConfig.lang.replace('_', '-'),
 	// TODO include cover image here
-};
+}
 ---
 
 <MainGridLayout
 	banner={entry.data.image}
 	title={entry.data.title}
-	description={entry.data.description}
+	description={publicDescription}
 	lang={entry.data.lang}
 	setOGTypeArticle={true}
 	postSlug={entry.id}
 	headings={headings}
+	coverImage={ogCoverUrl}
 >
 	<script
 		is:inline
-		slot="head"
-		type="application/ld+json"
+		slot='head'
+		type='application/ld+json'
 		set:html={JSON.stringify(jsonLd)}
 	/>
 	<!-- 引入右侧边栏布局管理器 -->
 	<script>
 		import('../../scripts/right-sidebar-layout.js')
 	</script>
-	<div
-		class="flex w-full rounded-(--radius-large) relative mb-4"
-	>
+	<div class='flex w-full rounded-(--radius-large) relative mb-4'>
 		<div
-			id="post-container"
+			id='post-container'
 			class:list={[
 				'card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full max-w-full',
 				{},
@@ -217,42 +239,42 @@ const jsonLd = {
 		>
 			<!-- word count and reading time -->
 			<div
-				class="flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation"
+				class='flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation'
 			>
-				<div class="flex flex-row items-center">
+				<div class='flex flex-row items-center'>
 					<WordCount
 						words={remarkPluginFrontmatter.words}
-						variant="card"
+						variant='card'
 					/>
 				</div>
-				<div class="flex flex-row items-center">
+				<div class='flex flex-row items-center'>
 					<ReadingTime
 						minutes={remarkPluginFrontmatter.minutes}
-						variant="card"
+						variant='card'
 					/>
 				</div>
 			</div>
 
 			<!-- title -->
-			<div class="relative onload-animation">
+			<div class='relative onload-animation'>
 				<div
 					data-pagefind-body
-					data-pagefind-weight="10"
-					data-pagefind-meta="title"
-					class="transition w-full block font-bold mb-3
+					data-pagefind-weight='10'
+					data-pagefind-meta='title'
+					class='transition w-full block font-bold mb-3
                     text-3xl md:text-[2.25rem]/[2.75rem]
                     text-black/90 dark:text-white/90
                     md:before:w-1 before:h-5 before:rounded-md before:bg-(--primary)
-                    before:absolute before:top-3 before:-left-4.5"
+                    before:absolute before:top-3 before:-left-4.5'
 				>
 					{entry.data.title}
 				</div>
 			</div>
 
 			<!-- metadata -->
-			<div class="onload-animation">
+			<div class='onload-animation'>
 				<PostMeta
-					className="mb-5"
+					className='mb-5'
 					published={entry.data.published}
 					updated={entry.data.updated}
 					tags={entry.data.tags}
@@ -261,10 +283,10 @@ const jsonLd = {
 					showEncrypted={isEncrypted}
 				/>
 				{
-					(!entry.data.image ||
-						(entry.data.image &&
-							!siteConfig.showCoverInContent)) && (
-						<div class="mt-4 border-(--line-divider) border-dashed border-b mb-5" />
+					(!entry.data.image
+						|| (entry.data.image
+							&& !siteConfig.showCoverInContent)) && (
+						<div class='mt-4 border-(--line-divider) border-dashed border-b mb-5' />
 					)
 				}
 			</div>
@@ -274,14 +296,14 @@ const jsonLd = {
 			{
 				entry.data.image && siteConfig.showCoverInContent && (
 					<>
-						<div class="mt-4" />
+						<div class='mt-4' />
 						<Image
-							id="post-cover"
+							id='post-cover'
 							src={entry.data.image}
 							basePath={getFileDirFromPath(entry.filePath || '')}
-							class="mb-8 rounded-xl banner-container onload-animation"
+							class='mb-8 rounded-xl banner-container onload-animation'
 							widths={[640, 1024, 1536, 2048]}
-							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+							sizes='(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px'
 						/>
 					</>
 				)
@@ -293,12 +315,12 @@ const jsonLd = {
 						password={entry.data.password}
 						hint={entry.data.passwordHint}
 					>
-						<Markdown class="mb-6 markdown-content onload-animation">
+						<Markdown class='mb-6 markdown-content onload-animation'>
 							<Content />
 						</Markdown>
 					</Encryptor>
 				) : (
-					<Markdown class="mb-6 markdown-content onload-animation">
+					<Markdown class='mb-6 markdown-content onload-animation'>
 						<Content />
 					</Markdown>
 				)
@@ -310,7 +332,7 @@ const jsonLd = {
 						class:list={[{ 'encrypted-hidden': isEncrypted }]}
 						title={entry.data.title}
 						author={entry.data.author}
-						description={entry.data.description}
+						description={publicDescription}
 						pubDate={formatDateToYYYYMMDD(entry.data.published)}
 						coverImage={posterCoverUrl}
 						url={Astro.url.toString()}
@@ -323,7 +345,7 @@ const jsonLd = {
 			{
 				licenseConfig.enable && (
 					<div
-						id="license-component"
+						id='license-component'
 						class:list={[
 							'encrypted-hidden-wrapper',
 							{ 'encrypted-hidden': isEncrypted },
@@ -337,7 +359,7 @@ const jsonLd = {
 							sourceLink={entry.data.sourceLink}
 							licenseName={entry.data.licenseName}
 							licenseUrl={entry.data.licenseUrl}
-							class="mb-6 rounded-xl license-container onload-animation"
+							class='mb-6 rounded-xl license-container onload-animation'
 						/>
 					</div>
 				)
@@ -366,7 +388,7 @@ const jsonLd = {
 	<!-- 相关文章与随机文章 -->
 	{
 		(relatedPostsConfig.enable || randomPostsConfig.enable) && (
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+			<div class='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
 				{relatedPostsConfig.enable && relatedPosts.length > 0 && (
 					<RelatedPosts relatedPosts={relatedPosts} />
 				)}

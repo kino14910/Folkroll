@@ -198,7 +198,7 @@
 	})
 </script>
 
-<svelte:window on:keydown={handleVolumeKeyDown} />
+<svelte:window onkeydown={handleVolumeKeyDown} />
 
 {#if shouldRenderFloatingUi}
 	{#if state.showError}

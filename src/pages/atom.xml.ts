@@ -9,6 +9,7 @@ import { profileConfig, siteConfig } from '@/config'
 import { getSortedPosts } from '@/utils/content-utils'
 import { initPostIdMap } from '@/utils/permalink-utils'
 import { getPostUrl } from '@/utils/url-utils'
+import { getPostPublicDescription } from '@utils/post-card-content'
 
 const markdownParser = new MarkdownIt()
 
@@ -134,7 +135,7 @@ export async function GET(context: APIContext) {
     <id>${postUrl}</id>
     <published>${post.data.published.toISOString()}</published>
     <updated>${post.data.updated?.toISOString() || post.data.published.toISOString()}</updated>
-    <summary>${post.data.description || ''}</summary>
+    <summary>${getPostPublicDescription(post.data)}</summary>
     <content type="html"><![CDATA[${content}]]></content>
     <author>
       <name>${profileConfig.name}</name>
